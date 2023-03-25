@@ -1,8 +1,11 @@
-import { get_encoding } from '@dqbd/tiktoken'
+import GPT3TokenizerImport from 'gpt3-tokenizer'
 
-// TODO: make this configurable
-const tokenizer = get_encoding('cl100k_base')
+const GPT3Tokenizer: typeof GPT3TokenizerImport =
+  typeof GPT3TokenizerImport === 'function'
+    ? GPT3TokenizerImport
+    : (GPT3TokenizerImport as any).default
+export const tokenizer = new GPT3Tokenizer({ type: 'gpt3' })
 
-export function encode(input: string): Uint32Array {
-  return tokenizer.encode(input)
+export function encode(input: string): number[] {
+  return tokenizer.encode(input).bpe
 }
